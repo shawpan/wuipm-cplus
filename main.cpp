@@ -1,20 +1,13 @@
 // clang++ -std=c++11 *.cpp
 
-#include "WUIPMNode.h"
+#include "wuipm_tree.h"
 
 using namespace std;
 
 int main () {
 
-  shared_ptr<WUIPMNode> root = make_shared<WUIPMNode>();
-  shared_ptr<WUIPMNode> child = make_shared<WUIPMNode>();
-  child->SetParent(root);
-  root->AddChild(child);
-  child->Print();
-  root->Print();
+  shared_ptr<WUIPMTree> wuipm_tree = make_shared<WUIPMTree>();
+  wuipm_tree->Print();
 
-  //child.reset();
-  root.reset();
-  child.reset();
   return 0;
 }
