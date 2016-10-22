@@ -8,7 +8,7 @@ void WUIPMTree::PrintTree(std::shared_ptr<WUIPMNode> root) const {
   }
 }
 
-void WUIPMTree::Print () {
+void WUIPMTree::Print () const {
   std::cout << "********************" << std::endl;
   std::cout << "Printing WUIPM Tree" << std::endl;
   PrintTree(root_);
