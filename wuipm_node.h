@@ -1,5 +1,5 @@
-#ifndef WUIPM_CPLUS_WUIPMNODE_H_
-#define WUIPM_CPLUS_WUIPMNODE_H_
+#ifndef WUIPM_CPLUS_WUIPM_NODE_H_
+#define WUIPM_CPLUS_WUIPM_NODE_H_
 
 #include <vector>
 #include <iostream>
@@ -42,4 +42,4 @@ class WUIPMNode {
     std::vector<std::shared_ptr<WUIPMNode> > children_;
 };
 
-#endif // WUIPM_CPLUS_WUIPMNODE_H_
+#endif // WUIPM_CPLUS_WUIPM_NODE_H_

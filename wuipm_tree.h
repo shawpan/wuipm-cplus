@@ -20,4 +20,4 @@ class WUIPMTree {
     std::shared_ptr<WUIPMNode> root_;
 };
 
-#endif // WUIPM_CPLUS_WUIPMTREE_H_
+#endif // WUIPM_CPLUS_WUIPM_TREE_H_
