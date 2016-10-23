@@ -16,8 +16,9 @@ class WUIPMNode {
 
     ~WUIPMNode() {};
 
-    void Print() const;
+    void Print(std::string, bool) const;
 
+    int GetFeatureId() const { return feature_id_; };
     double GetPCap() const { return p_cap_; };
     double GetPProxy() const { return p_proxy_; };
     std::shared_ptr<WUIPMNode> GetParent() const { return parent_; };

@@ -1,12 +1,17 @@
 #include "wuipm_node.h"
 
-void WUIPMNode::Print () const {
-  std::cout << "------------------------" << std::endl;
-  std::cout << "Printing WUIPM Node ..." << std::endl;
-  std::cout << "Feature Id: " << feature_id_ << std::endl;
-  std::cout << "pCap: " << p_cap_ << std::endl;
-  std::cout << "pProxy: " << p_proxy_ << std::endl;
-  std::cout << "Parent exists? : " << (parent_? "yes" : "no") << std::endl;
-  std::cout << "Number of children : " << children_.size() << std::endl;
-  std::cout << "------------------------" << std::endl;
+void WUIPMNode::Print (std::string prefix = "", bool details = false) const {
+  std::cout << prefix << "------------------------" << std::endl;
+  if (details) std::cout << prefix << "Printing WUIPM Node ..." << std::endl;
+  if (details) std::cout << prefix << "Feature Id: " << feature_id_ << std::endl;
+  if (details) std::cout << prefix << "pCap: " << p_cap_ << std::endl;
+  if (details) std::cout << prefix << "pProxy: " << p_proxy_ << std::endl;
+  if (details) std::cout << prefix << "Parent exists? : " << (parent_? "yes" : "no") << std::endl;
+  if (details) std::cout << prefix << "Number of children : " << children_.size() << std::endl;
+  if (! details) {
+    std::cout << prefix << "( " << feature_id_ << ", ";
+    std::cout << p_cap_ << ", ";
+    std::cout << p_proxy_ <<" )";
+    std::cout<<std::endl;
+  }
 }

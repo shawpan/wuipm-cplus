@@ -7,7 +7,8 @@ using namespace std;
 int main () {
 
   shared_ptr<WUIPMTree> wuipm_tree = make_shared<WUIPMTree>();
-  wuipm_tree->Print();
+  wuipm_tree->Construct();
+  wuipm_tree->Print(false /* details off */);
 
   return 0;
 }

@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <memory>
+#include <unordered_map>
 #include "wuipm_node.h"
 
 class WUIPMTree {
@@ -11,13 +12,16 @@ class WUIPMTree {
     WUIPMTree() { root_ = std::make_shared<WUIPMNode>(); };
     ~WUIPMTree() {};
 
-    void Print() const;
+    void Print(bool) const;
 
     std::shared_ptr<WUIPMNode> GetRoot() const { return root_; };
+    void Construct();
 
   private:
-    void PrintTree(std::shared_ptr<WUIPMNode>) const;
+    void PrintTree(std::shared_ptr<WUIPMNode>, std::string, bool) const;
+    void InsertRow(std::unordered_map<int, double>);
     std::shared_ptr<WUIPMNode> root_;
+
 };
 
 #endif // WUIPM_CPLUS_WUIPM_TREE_H_
