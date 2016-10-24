@@ -6,7 +6,7 @@ using namespace std;
 
 int main () {
 
-  shared_ptr<WUIPMTree> wuipm_tree = make_shared<WUIPMTree>();
+  shared_ptr<WUIPMTree> wuipm_tree = make_shared<WUIPMTree>(0.18 /* minimum support threshold 18% */);
   wuipm_tree->Construct();
   wuipm_tree->Print(false /* details off */);
 
