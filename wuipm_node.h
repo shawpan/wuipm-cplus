@@ -17,17 +17,16 @@ class WUIPMNode {
     ~WUIPMNode() {};
 
     void Print(std::string, bool) const;
+    void AddChild(std::shared_ptr<WUIPMNode> child) { children_.push_back(child); };
 
     int feature_id() const { return feature_id_; };
     double p_cap() const { return p_cap_; };
     double p_proxy() const { return p_proxy_; };
     std::shared_ptr<WUIPMNode> parent() const { return parent_; };
     std::vector<std::shared_ptr<WUIPMNode> > children() const { return children_; };
-
     void parent(std::shared_ptr<WUIPMNode> parent) { parent_ = parent; };
     void p_cap(double p_cap) { p_cap_ = p_cap; };
     void p_proxy(double p_proxy) { p_proxy_ = p_proxy; };
-    void AddChild(std::shared_ptr<WUIPMNode> child) { children_.push_back(child); };
   private:
     // Represents feature, encoded as a number
     // e.g., feature set of a medical diagnosis

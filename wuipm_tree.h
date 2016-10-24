@@ -13,13 +13,14 @@ class WUIPMTree {
     ~WUIPMTree() {};
 
     void Print(bool) const;
+    void Construct();
 
     std::shared_ptr<WUIPMNode> root() const { return root_; };
-    void Construct();
 
   private:
     void PrintTree(std::shared_ptr<WUIPMNode>, std::string, bool) const;
     void InsertRow(std::unordered_map<int, double>);
+    
     std::shared_ptr<WUIPMNode> root_;
 
 };
