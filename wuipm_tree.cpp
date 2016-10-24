@@ -156,6 +156,9 @@ void WUIPMTree::Construct () {
   for (auto row_it = udb.begin(); row_it != udb.end(); ++row_it) {
     CalculateExpectedSupportOfItemsForRow(*row_it);
   }
+
+  RemoveItemsLessThanThreshold();
+  
   for (auto row_it = udb.begin(); row_it != udb.end(); ++row_it) {
     InsertRow(*row_it);
   }
