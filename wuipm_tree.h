@@ -14,7 +14,7 @@ class WUIPMTree {
 
     void Print(bool) const;
 
-    std::shared_ptr<WUIPMNode> GetRoot() const { return root_; };
+    std::shared_ptr<WUIPMNode> root() const { return root_; };
     void Construct();
 
   private:

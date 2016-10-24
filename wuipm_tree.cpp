@@ -2,7 +2,7 @@
 
 void WUIPMTree::PrintTree(std::shared_ptr<WUIPMNode> root, std::string prefix, bool details = false) const {
   root->Print(prefix, details);
-  std::vector<std::shared_ptr<WUIPMNode> > children = root->GetChildren();
+  std::vector<std::shared_ptr<WUIPMNode> > children = root->children();
   for (size_t i = 0; i < children.size(); i++) {
     PrintTree(children[i], prefix + "    ", details);
   }
@@ -17,11 +17,11 @@ void WUIPMTree::Print (bool details = false) const {
 void WUIPMTree::InsertRow (std::unordered_map<int, double> row) {
   std::shared_ptr<WUIPMNode> current_root = root_;
   for (auto it = row.begin(); it != row.end(); it++) {
-    std::vector<std::shared_ptr<WUIPMNode> > children = current_root->GetChildren();
+    std::vector<std::shared_ptr<WUIPMNode> > children = current_root->children();
     bool child_found = false;
     for (size_t j = 0; j < children.size(); j++) {
       // If branch is matched break
-      if (children[j]->GetFeatureId() == it->first) {
+      if (children[j]->feature_id() == it->first) {
         current_root = children[j];
         child_found = true;
         break;
@@ -31,7 +31,7 @@ void WUIPMTree::InsertRow (std::unordered_map<int, double> row) {
     if (! child_found) {
       std::shared_ptr<WUIPMNode> new_child = std::make_shared<WUIPMNode>(it->first);
       current_root->AddChild(new_child);
-      new_child->SetParent(current_root);
+      new_child->parent(current_root);
       current_root = new_child;
     }
   }
