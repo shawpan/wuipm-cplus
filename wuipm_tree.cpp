@@ -144,7 +144,7 @@ void WUIPMTree::RemoveItemsLessThanThreshold() {
   }
 }
 
-//
+// Reset temporary values to 0
 void WUIPMTree::ResetTemporaryValues (int feature_id, std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > node_map) {
   for (auto node_iterator = feature_to_node_in_tree_[feature_id].begin(); node_iterator != feature_to_node_in_tree_[feature_id].end() ; ++node_iterator) {
     std::shared_ptr<WUIPMNode> node = *node_iterator;
@@ -156,6 +156,7 @@ void WUIPMTree::ResetTemporaryValues (int feature_id, std::unordered_map<int, st
   }
 }
 
+// Project a subtree given the feature 
 void WUIPMTree::ProjectTree (int feature_id) {
   ResetTemporaryValues(feature_id, feature_to_node_in_tree_);
   // For each node of this feature
