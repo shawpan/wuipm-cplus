@@ -85,13 +85,13 @@ bool WUIPMTree::ProcessItemInExistingBranch (
   return false;
 }
 
-bool WUIPMTree::ItemCompare (const std::pair<double, std::pair<int, double> >& left, const std::pair<double, std::pair<int, double> >& right) {
+bool WUIPMTree::ItemCompare (const PAIR_DOUBLE_INT_DOUBLE& left, const PAIR_DOUBLE_INT_DOUBLE& right) {
   return left.first > right.first;
 }
 
 // Get row sorted and transformed according to expected support of items
-std::vector<std::pair<double, std::pair<int, double> > > WUIPMTree::GetTransformedRow(std::vector<std::pair<int, double> >& row) {
-  std::vector<std::pair<double, std::pair<int, double> > > transformed_row;
+std::vector<PAIR_DOUBLE_INT_DOUBLE> WUIPMTree::GetTransformedRow(std::vector<PAIR_INT_DOUBLE>& row) {
+  std::vector<PAIR_DOUBLE_INT_DOUBLE> transformed_row;
   // Add expected support of items for sorting
   for (auto it = row.begin(); it != row.end(); it++) {
     transformed_row.push_back(std::make_pair(expected_support_of_items_[it->first], std::make_pair(it->first, it->second)));
@@ -102,11 +102,11 @@ std::vector<std::pair<double, std::pair<int, double> > > WUIPMTree::GetTransform
 }
 
 // Insert a data tuple
-void WUIPMTree::InsertRow (std::vector<std::pair<int, double> > row) {
+void WUIPMTree::InsertRow (std::vector<PAIR_INT_DOUBLE> row) {
   std::shared_ptr<WUIPMNode> current_root = root_;
   double max_so_far = 0, second_max_so_far = 0;
   bool is_same_branch = true;
-    std::vector<std::pair<double, std::pair<int, double> > > transformed_row = GetTransformedRow(row);
+    std::vector<PAIR_DOUBLE_INT_DOUBLE> transformed_row = GetTransformedRow(row);
 
   for (auto transformed_row_it = transformed_row.begin(); transformed_row_it != transformed_row.end(); transformed_row_it++) {
     if (transformed_row_it->first == 0.0) {
@@ -126,7 +126,7 @@ void WUIPMTree::InsertRow (std::vector<std::pair<int, double> > row) {
 }
 
 // Update expected support of items for row
-void WUIPMTree::CalculateExpectedSupportOfItemsForRow(std::vector<std::pair<int, double> > row) {
+void WUIPMTree::CalculateExpectedSupportOfItemsForRow(std::vector<PAIR_INT_DOUBLE> row) {
   for (auto item_iterator = row.begin(); item_iterator != row.end(); ++item_iterator) {
     expected_support_of_items_[item_iterator->first] += item_iterator->second;
   }
@@ -143,7 +143,7 @@ void WUIPMTree::RemoveItemsLessThanThreshold() {
 
 // Construc WUIPMTree from database
 void WUIPMTree::Construct () {
-  std::vector<std::vector<std::pair<int, double> > > udb = {
+  std::vector<std::vector<PAIR_INT_DOUBLE> > udb = {
     //{ {4 , 0.6}, {1, 0.5}, {3, 0.4}, {2, 0.9}, {5, 0.3} },
     { {5 , 0.3}, {3, 0.4}, {1, 0.5}, {2, 0.9}, {4, 0.6} },
     { {4 , 0.5}, {1, 0.6}, {3, 0.4}, {2, 0.3} },
@@ -158,7 +158,7 @@ void WUIPMTree::Construct () {
   }
 
   RemoveItemsLessThanThreshold();
-  
+
   for (auto row_it = udb.begin(); row_it != udb.end(); ++row_it) {
     InsertRow(*row_it);
   }

@@ -8,6 +8,9 @@
 #include <algorithm>
 #include "wuipm_node.h"
 
+#define PAIR_INT_DOUBLE std::pair<int, double>
+#define PAIR_DOUBLE_INT_DOUBLE std::pair<double, PAIR_INT_DOUBLE>
+
 class WUIPMTree {
   public:
     WUIPMTree(double minimum_support_threshold) {
@@ -22,18 +25,18 @@ class WUIPMTree {
     std::shared_ptr<WUIPMNode> root() const { return root_; };
 
 
-    static bool ItemCompare (const std::pair<double, std::pair<int, double> >& left, const std::pair<double, std::pair<int, double> >& right);
+    static bool ItemCompare (const PAIR_DOUBLE_INT_DOUBLE& left, const PAIR_DOUBLE_INT_DOUBLE& right);
 
   private:
     void PrintTree(std::shared_ptr<WUIPMNode>, std::string, bool) const;
-    void InsertRow(std::vector<std::pair<int, double> >);
+    void InsertRow(std::vector<PAIR_INT_DOUBLE>);
     void UpdateExistingBranch(std::shared_ptr<WUIPMNode>&, std::shared_ptr<WUIPMNode>&, double, double, double);
     void ProcessItemInNewBranch(std::shared_ptr<WUIPMNode>&, int, double, double, double);
     void UpdateMaxValues(double&, double&, double);
     bool ProcessItemInExistingBranch(int, std::shared_ptr<WUIPMNode>&, double, double, double);
-    void CalculateExpectedSupportOfItemsForRow(std::vector<std::pair<int, double> >);
+    void CalculateExpectedSupportOfItemsForRow(std::vector<PAIR_INT_DOUBLE>);
     void RemoveItemsLessThanThreshold();
-    std::vector<std::pair<double, std::pair<int, double> > > GetTransformedRow (std::vector<std::pair<int, double> >&);
+    std::vector<PAIR_DOUBLE_INT_DOUBLE> GetTransformedRow (std::vector<PAIR_INT_DOUBLE>&);
 
     std::shared_ptr<WUIPMNode> root_;
     std::unordered_map<int, double> expected_support_of_items_;
