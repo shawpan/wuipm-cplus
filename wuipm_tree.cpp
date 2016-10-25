@@ -43,6 +43,9 @@ void WUIPMTree::ProcessItemInNewBranch (
                                             max_so_far * probabilty_value, /* pCap*/
                                             second_max_so_far /* pProxy */
                                           );
+  // Insert node address of this feature id
+  feature_to_node_in_tree_[feature_id].push_back(new_child);
+
   new_child->p_cap(probabilty_value * max_so_far);
   new_child->p_proxy(second_max_so_far);
   current_root->AddChild(new_child);
@@ -141,6 +144,38 @@ void WUIPMTree::RemoveItemsLessThanThreshold() {
   }
 }
 
+//
+void WUIPMTree::ResetTemporaryValues (int feature_id, std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > node_map) {
+  for (auto node_iterator = feature_to_node_in_tree_[feature_id].begin(); node_iterator != feature_to_node_in_tree_[feature_id].end() ; ++node_iterator) {
+    std::shared_ptr<WUIPMNode> node = *node_iterator;
+    while (node->parent()) {
+      node->temporary_p_cap(0.0);
+      node->temporary_p_proxy(0.0);
+      node = node->parent();
+    }
+  }
+}
+
+void WUIPMTree::ProjectTree (int feature_id) {
+  ResetTemporaryValues(feature_id, feature_to_node_in_tree_);
+  // For each node of this feature
+  for (auto node_iterator = feature_to_node_in_tree_[feature_id].begin(); node_iterator != feature_to_node_in_tree_[feature_id].end() ; ++node_iterator) {
+    std::shared_ptr<WUIPMNode> start_node = *node_iterator;
+    // Next node towards root
+    std::shared_ptr<WUIPMNode> next_node = (*node_iterator)->parent();
+    double p_cap = start_node->p_cap();
+    double p_proxy = start_node->p_proxy();
+    while (next_node) {
+      double temporary_p_cap = p_cap + next_node->temporary_p_cap();
+      double temporary_p_proxy = fmax(p_proxy, next_node->temporary_p_proxy());
+      // Set projected values
+      next_node->temporary_p_cap(temporary_p_cap);
+      next_node->temporary_p_proxy(temporary_p_proxy);
+      next_node = next_node->parent();
+    }
+  }
+}
+
 // Construc WUIPMTree from database
 void WUIPMTree::Construct () {
   std::vector<std::vector<PAIR_INT_DOUBLE> > udb = {
@@ -162,4 +197,6 @@ void WUIPMTree::Construct () {
   for (auto row_it = udb.begin(); row_it != udb.end(); ++row_it) {
     InsertRow(*row_it);
   }
+
+  ProjectTree(5);
 }

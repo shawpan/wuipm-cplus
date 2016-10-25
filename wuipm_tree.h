@@ -36,10 +36,14 @@ class WUIPMTree {
     bool ProcessItemInExistingBranch(int, std::shared_ptr<WUIPMNode>&, double, double, double);
     void CalculateExpectedSupportOfItemsForRow(std::vector<PAIR_INT_DOUBLE>);
     void RemoveItemsLessThanThreshold();
+    void ProjectTree(int);
+    void ResetTemporaryValues(int, std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >);
     std::vector<PAIR_DOUBLE_INT_DOUBLE> GetTransformedRow (std::vector<PAIR_INT_DOUBLE>&);
 
     std::shared_ptr<WUIPMNode> root_;
     std::unordered_map<int, double> expected_support_of_items_;
+    // Keep node adresses in tree grouped by feature id
+    std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > feature_to_node_in_tree_;
     double minimum_support_threshold_;
 
 };
