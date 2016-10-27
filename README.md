@@ -39,7 +39,7 @@ int main () {
   std::vector<std::vector<int> > interesting_patterns = wuipm_tree->GetInterestingPatterns();
 
   for (size_t i = 0; i < interesting_patterns.size(); i++) {
-    std::cout << i << ") ";
+    std::cout << i + 1 << ") ";
     PrintPattern(interesting_patterns[i]);
   }
 
