@@ -4,6 +4,13 @@
 
 using namespace std;
 
+void PrintPattern (std::vector<int> pattern) {
+  for (size_t i = 0; i < pattern.size(); i++) {
+    std::cout << pattern[i] << " ";
+  }
+  std::cout << std::endl;
+}
+
 int main () {
 
   std::vector<std::vector<PAIR_INT_DOUBLE> > udb = {
@@ -20,7 +27,12 @@ int main () {
   shared_ptr<WUIPMTree> wuipm_tree = make_shared<WUIPMTree>();
   wuipm_tree->Construct(0.18 /* minimum support threshold 18% */, udb);
   //wuipm_tree->Print(false /* details off */);
-  wuipm_tree->GetInterestingPatterns();
+  std::vector<std::vector<int> > interesting_patterns = wuipm_tree->GetInterestingPatterns();
+
+  for (size_t i = 0; i < interesting_patterns.size(); i++) {
+    std::cout << i << ") ";
+    PrintPattern(interesting_patterns[i]);
+  }
 
   return 0;
 }
