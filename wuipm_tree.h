@@ -41,10 +41,12 @@ class WUIPMTree {
     std::vector<PAIR_DOUBLE_INT_DOUBLE> GetTransformedRow (std::vector<PAIR_INT_DOUBLE>&);
     double GetCurrentExpectedSupportCapOfFeature (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >& feature_to_node_in_tree, int feature_id);
     void Mine(std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >, std::vector<std::vector<int> >&, std::vector<int>);
-    std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > PruneTree (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > feature_to_node_in_tree);
+    std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > PruneTree (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >, int);
+    void SetOrderOfFeature();
 
     std::shared_ptr<WUIPMNode> root_;
     std::unordered_map<int, double> expected_support_of_items_;
+    std::unordered_map<int, int> order_of_features_;
     // Keep node adresses in tree grouped by feature id
     std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > feature_to_node_in_tree_;
     double minimum_support_threshold_;

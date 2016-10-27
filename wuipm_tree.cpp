@@ -193,6 +193,7 @@ void WUIPMTree::Construct (double minimum_support_threshold_percentage, std::vec
   }
 
   ResetItemsLessThanThreshold();
+  SetOrderOfFeature();
 
   for (auto row_it = udb.begin(); row_it != udb.end(); ++row_it) {
     InsertRow(*row_it);
@@ -216,16 +217,21 @@ std::vector<std::vector<int> > WUIPMTree::GetInterestingPatterns () {
 double WUIPMTree::GetCurrentExpectedSupportCapOfFeature (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >& feature_to_node_in_tree, int feature_id) {
   double expected_support_cap = 0.0;
   for (auto feature_iterator = feature_to_node_in_tree[feature_id].begin(); feature_iterator != feature_to_node_in_tree[feature_id].end(); ++feature_iterator) {
-    expected_support_cap += (*feature_iterator)->p_cap();
+    expected_support_cap += (*feature_iterator)->temporary_p_cap();
+    (*feature_iterator)->temporary_p_cap((*feature_iterator)->temporary_p_cap() * (*feature_iterator)->temporary_p_proxy());
   }
 
   return expected_support_cap;
 }
 
 // Pune tree according to minimum support threshold
-std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > WUIPMTree::PruneTree (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > feature_to_node_in_tree) {
+std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > WUIPMTree::PruneTree (
+  std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > feature_to_node_in_tree, int feature_id) {
   std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > pruned_list;
   for (auto feature_iterator = feature_to_node_in_tree.begin(); feature_iterator != feature_to_node_in_tree.end(); ++feature_iterator) {
+    if (order_of_features_[feature_id] >= order_of_features_[feature_iterator->first]) {
+      continue;
+    }
     double expected_support_cap = GetCurrentExpectedSupportCapOfFeature(feature_to_node_in_tree, feature_iterator->first);
 
     if (expected_support_cap < minimum_support_threshold_) {
@@ -238,19 +244,32 @@ std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > WUIPMTree::Pr
   return pruned_list;
 }
 
+void WUIPMTree::SetOrderOfFeature () {
+  std::vector<std::pair<double, int> > features_and_expected_support;
+  for (auto it = expected_support_of_items_.begin(); it != expected_support_of_items_.end(); ++it) {
+    features_and_expected_support.push_back(std::make_pair(it->second, it->first));
+  }
+  // Sort features by expected support
+  sort(features_and_expected_support.begin(),features_and_expected_support.end());
+  int order = 1;
+  for (auto it = features_and_expected_support.begin(); it != features_and_expected_support.end(); ++it) {
+    order_of_features_[it->second] = order++;
+  }
+}
+
 // Mine on projected tree
 void WUIPMTree::Mine (
                 std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > existing_feature_to_node_in_tree,
                 std::vector<std::vector<int> >& interesting_patterns,
                 std::vector<int> prefix_pattern
               ) {
-  std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > pruned_feature_list = PruneTree(existing_feature_to_node_in_tree);
+  std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > pruned_feature_list = PruneTree(existing_feature_to_node_in_tree, prefix_pattern.back());
   for (auto feature_iterator = pruned_feature_list.begin(); feature_iterator != pruned_feature_list.end(); ++feature_iterator) {
-    if( find(prefix_pattern.begin(), prefix_pattern.end(), feature_iterator->first) != prefix_pattern.end() ) {
-      continue;
-    }
     std::vector<int> pattern(prefix_pattern);
     pattern.push_back(feature_iterator->first);
     interesting_patterns.push_back(pattern);
+    if (pruned_feature_list.size() > 0) {
+      Mine(pruned_feature_list, interesting_patterns, pattern);
+    }
   }
 }
