@@ -143,7 +143,7 @@ void WUIPMTree::CalculateExpectedSupportOfItemsForRow(std::vector<PAIR_INT_DOUBL
 void WUIPMTree::ResetItemsLessThanThreshold() {
   for (auto item_iterator = expected_support_of_items_.begin(); item_iterator != expected_support_of_items_.end(); ++item_iterator) {
     if (expected_support_of_items_[item_iterator->first] < minimum_support_threshold_) {
-      expected_support_of_items_[item_iterator->first] = 0;
+      item_iterator = expected_support_of_items_.erase(item_iterator);
     }
   }
 }
