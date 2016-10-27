@@ -46,6 +46,18 @@ int main () {
   return 0;
 }
 ```
+# Sample Output
+```
+0) 5 
+1) 5 4 
+2) 5 1 
+3) 5 3 
+4) 2 
+5) 3 
+6) 1 
+7) 4 
+```
+
 # TODO
 * Complete `uConf` and `wUConf`.
 * Introduce database adapter so that different databases can be used without loading into memory.
