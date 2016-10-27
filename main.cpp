@@ -19,7 +19,8 @@ int main () {
 
   shared_ptr<WUIPMTree> wuipm_tree = make_shared<WUIPMTree>();
   wuipm_tree->Construct(0.18 /* minimum support threshold 18% */, udb);
-  wuipm_tree->Print(false /* details off */);
+  //wuipm_tree->Print(false /* details off */);
+  wuipm_tree->GetInterestingPatterns();
 
   return 0;
 }

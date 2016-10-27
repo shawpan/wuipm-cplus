@@ -170,7 +170,8 @@ void WUIPMTree::ProjectTree (int feature_id) {
     std::shared_ptr<WUIPMNode> next_node = (*node_iterator)->parent();
     double p_cap = start_node->p_cap();
     double p_proxy = start_node->p_proxy();
-    while (next_node) {
+    // Until dummy root
+    while (next_node && next_node->feature_id() > 0) {
       double temporary_p_cap = p_cap + next_node->temporary_p_cap();
       double temporary_p_proxy = fmax(p_proxy, next_node->temporary_p_proxy());
       // Set projected values
@@ -196,6 +197,17 @@ void WUIPMTree::Construct (double minimum_support_threshold_percentage, std::vec
   for (auto row_it = udb.begin(); row_it != udb.end(); ++row_it) {
     InsertRow(*row_it);
   }
-
-  ProjectTree(5);
 }
+
+// Get the interesting patterns
+std::vector<std::vector<int> > WUIPMTree::GetInterestingPatterns() {
+    std::vector<std::vector<int> > interesting_patterns;
+
+    for (auto feature_iterator = feature_to_node_in_tree_.begin(); feature_iterator != feature_to_node_in_tree_.end(); ++feature_iterator) {
+      ProjectTree(feature_iterator->first);
+      std::cout << "Project tree for feature : " << feature_iterator->first << std::endl;
+      Print(false);
+    }
+
+    return interesting_patterns;
+};

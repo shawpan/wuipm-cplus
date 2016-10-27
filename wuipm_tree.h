@@ -21,6 +21,7 @@ class WUIPMTree {
 
     void Print(bool) const;
     void Construct(double, std::vector<std::vector<PAIR_INT_DOUBLE> >&);
+    std::vector<std::vector<int> > GetInterestingPatterns();
 
     std::shared_ptr<WUIPMNode> root() const { return root_; };
 
