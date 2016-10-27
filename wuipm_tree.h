@@ -13,17 +13,16 @@
 
 class WUIPMTree {
   public:
-    WUIPMTree(double minimum_support_threshold) {
+    WUIPMTree() {
       root_ = std::make_shared<WUIPMNode>();
-      minimum_support_threshold_ = minimum_support_threshold;
     };
+
     ~WUIPMTree() {};
 
     void Print(bool) const;
-    void Construct();
+    void Construct(double, std::vector<std::vector<PAIR_INT_DOUBLE> >&);
 
     std::shared_ptr<WUIPMNode> root() const { return root_; };
-
 
     static bool ItemCompare (const PAIR_DOUBLE_INT_DOUBLE& left, const PAIR_DOUBLE_INT_DOUBLE& right);
 
@@ -35,7 +34,7 @@ class WUIPMTree {
     void UpdateMaxValues(double&, double&, double);
     bool ProcessItemInExistingBranch(int, std::shared_ptr<WUIPMNode>&, double, double, double);
     void CalculateExpectedSupportOfItemsForRow(std::vector<PAIR_INT_DOUBLE>);
-    void RemoveItemsLessThanThreshold();
+    void ResetItemsLessThanThreshold();
     void ProjectTree(int);
     void ResetTemporaryValues(int, std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >);
     std::vector<PAIR_DOUBLE_INT_DOUBLE> GetTransformedRow (std::vector<PAIR_INT_DOUBLE>&);
@@ -45,7 +44,7 @@ class WUIPMTree {
     // Keep node adresses in tree grouped by feature id
     std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > feature_to_node_in_tree_;
     double minimum_support_threshold_;
-
+    double minimum_support_threshold_percentage_;
 };
 
 #endif // WUIPM_CPLUS_WUIPM_TREE_H_

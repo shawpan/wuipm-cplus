@@ -92,11 +92,15 @@ bool WUIPMTree::ItemCompare (const PAIR_DOUBLE_INT_DOUBLE& left, const PAIR_DOUB
   return left.first > right.first;
 }
 
-// Get row sorted and transformed according to expected support of items
+// Get row sorted and transformed according to expected support of items, remove items less than minimum support count
 std::vector<PAIR_DOUBLE_INT_DOUBLE> WUIPMTree::GetTransformedRow(std::vector<PAIR_INT_DOUBLE>& row) {
   std::vector<PAIR_DOUBLE_INT_DOUBLE> transformed_row;
   // Add expected support of items for sorting
   for (auto it = row.begin(); it != row.end(); it++) {
+    // If does not meet minimum support threshold, skip
+    if (expected_support_of_items_[it->first] < minimum_support_threshold_) {
+      continue;
+    }
     transformed_row.push_back(std::make_pair(expected_support_of_items_[it->first], std::make_pair(it->first, it->second)));
   }
   sort(transformed_row.begin(), transformed_row.end(), WUIPMTree::ItemCompare);
@@ -136,7 +140,7 @@ void WUIPMTree::CalculateExpectedSupportOfItemsForRow(std::vector<PAIR_INT_DOUBL
 }
 
 // Update expected support of items for row
-void WUIPMTree::RemoveItemsLessThanThreshold() {
+void WUIPMTree::ResetItemsLessThanThreshold() {
   for (auto item_iterator = expected_support_of_items_.begin(); item_iterator != expected_support_of_items_.end(); ++item_iterator) {
     if (expected_support_of_items_[item_iterator->first] < minimum_support_threshold_) {
       expected_support_of_items_[item_iterator->first] = 0;
@@ -156,7 +160,7 @@ void WUIPMTree::ResetTemporaryValues (int feature_id, std::unordered_map<int, st
   }
 }
 
-// Project a subtree given the feature 
+// Project a subtree given the feature
 void WUIPMTree::ProjectTree (int feature_id) {
   ResetTemporaryValues(feature_id, feature_to_node_in_tree_);
   // For each node of this feature
@@ -177,23 +181,17 @@ void WUIPMTree::ProjectTree (int feature_id) {
   }
 }
 
-// Construc WUIPMTree from database
-void WUIPMTree::Construct () {
-  std::vector<std::vector<PAIR_INT_DOUBLE> > udb = {
-    //{ {4 , 0.6}, {1, 0.5}, {3, 0.4}, {2, 0.9}, {5, 0.3} },
-    { {5 , 0.3}, {3, 0.4}, {1, 0.5}, {2, 0.9}, {4, 0.6} },
-    { {4 , 0.5}, {1, 0.6}, {3, 0.4}, {2, 0.3} },
-    { {4 , 0.2}, {1, 0.1}, {3, 0.9}, {5, 0.4} },
-    { {4 , 0.2}, {1, 0.9}, {3, 0.1}, {5, 0.8} },
-    { {4 , 0.9}, {1, 0.1}, {3, 0.2}, {2, 0.3} },
-    { {4 , 0.5}, {1, 0.1}, {3, 0.2}, {2, 0.3} },
-    { {4 , 0.4}, {2, 0.2}, {5, 0.3} }
-  };
+// Construct WUIPMTree from database
+void WUIPMTree::Construct (double minimum_support_threshold_percentage, std::vector<std::vector<PAIR_INT_DOUBLE> >& udb) {
+  // Set minimum support count
+  minimum_support_threshold_percentage_ = minimum_support_threshold_percentage;
+  minimum_support_threshold_ = minimum_support_threshold_percentage_ * udb.size();
+
   for (auto row_it = udb.begin(); row_it != udb.end(); ++row_it) {
     CalculateExpectedSupportOfItemsForRow(*row_it);
   }
 
-  RemoveItemsLessThanThreshold();
+  ResetItemsLessThanThreshold();
 
   for (auto row_it = udb.begin(); row_it != udb.end(); ++row_it) {
     InsertRow(*row_it);
