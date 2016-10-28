@@ -60,5 +60,5 @@ int main () {
 ```
 
 # TODO
-* Complete `uConf` and `wUConf`.
+* Complete `wUConf`.
 * Introduce database adapter so that different databases can be used without loading into memory.
