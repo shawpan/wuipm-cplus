@@ -183,10 +183,12 @@ void WUIPMTree::ProjectTree (int feature_id) {
 }
 
 // Construct WUIPMTree from database
-void WUIPMTree::Construct (double minimum_support_threshold_percentage, std::vector<std::vector<PAIR_INT_DOUBLE> >& udb) {
+void WUIPMTree::Construct (double minimum_support_threshold_percentage, double minimum_u_conf, double minimum_wu_conf, std::vector<std::vector<PAIR_INT_DOUBLE> >& udb, std::unordered_map<int, double>& weight) {
   // Set minimum support count
   minimum_support_threshold_percentage_ = minimum_support_threshold_percentage;
   minimum_support_threshold_ = minimum_support_threshold_percentage_ * udb.size();
+  minimum_u_conf_ = minimum_u_conf;
+  minimum_wu_conf_ = minimum_wu_conf;
 
   for (auto row_it = udb.begin(); row_it != udb.end(); ++row_it) {
     CalculateExpectedSupportOfItemsForRow(*row_it);

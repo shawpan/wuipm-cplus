@@ -23,9 +23,10 @@ int main () {
     { {4 , 0.5}, {1, 0.1}, {3, 0.2}, {2, 0.3} },
     { {4 , 0.4}, {2, 0.2}, {5, 0.3} }
   };
+  std::unordered_map<int, double> weight = { {4, 0.1}, {1, 0.2}, {3, 0.3}, {2, 0.4}, {5, 0.5} };
 
   shared_ptr<WUIPMTree> wuipm_tree = make_shared<WUIPMTree>();
-  wuipm_tree->Construct(0.18 /* minimum support threshold 18% */, udb);
+  wuipm_tree->Construct(0.18 /* minimum support threshold 18% */, 0.1 /* minimum affinity 10% */, 0.1 /* minimum weighted affinity 10% */,  udb, weight);
   //wuipm_tree->Print(false /* details off */);
   std::vector<std::vector<int> > interesting_patterns = wuipm_tree->GetInterestingPatterns();
 

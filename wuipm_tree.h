@@ -20,7 +20,7 @@ class WUIPMTree {
     ~WUIPMTree() {};
 
     void Print(bool) const;
-    void Construct(double, std::vector<std::vector<PAIR_INT_DOUBLE> >&);
+    void Construct(double, double, double, std::vector<std::vector<PAIR_INT_DOUBLE> >&, std::unordered_map<int, double>&);
     std::vector<std::vector<int> > GetInterestingPatterns();
 
     std::shared_ptr<WUIPMNode> root() const { return root_; };
@@ -51,6 +51,9 @@ class WUIPMTree {
     std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > feature_to_node_in_tree_;
     double minimum_support_threshold_;
     double minimum_support_threshold_percentage_;
+    double minimum_u_conf_;
+    double minimum_wu_conf_;
+    std::unordered_map<int, double> weight;
 };
 
 #endif // WUIPM_CPLUS_WUIPM_TREE_H_
