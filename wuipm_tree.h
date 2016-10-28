@@ -40,9 +40,10 @@ class WUIPMTree {
     void ResetTemporaryValues(int, std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >);
     std::vector<PAIR_DOUBLE_INT_DOUBLE> GetTransformedRow (std::vector<PAIR_INT_DOUBLE>&);
     double GetCurrentExpectedSupportCapOfFeature (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >& feature_to_node_in_tree, int feature_id);
-    void Mine(std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >, std::vector<std::vector<int> >&, std::vector<int>);
-    std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > PruneTree (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >, int);
+    void Mine(std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >, std::vector<std::vector<int> >&, std::vector<int>, double);
+    std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > PruneTree (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >, int, double);
     void SetOrderOfFeature();
+    double GetUConfCap (double expected_support_cap, double so_far_maximum_expecected_support, int candidate_feature_id);
 
     std::shared_ptr<WUIPMNode> root_;
     std::unordered_map<int, double> expected_support_of_items_;
