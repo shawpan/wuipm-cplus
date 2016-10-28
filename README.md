@@ -48,6 +48,7 @@ int main () {
 ```
 # Sample Output
 ```
+minExpectedSupport = 18%, uConf = 0.0, wUConf = 0.0
 1) 5
 2) 5 4
 3) 5 1
@@ -56,6 +57,15 @@ int main () {
 6) 3
 7) 1
 8) 4
+
+minExpectedSupport = 18%, uConf = 50%, wUConf = 0.0
+1) 5
+2) 5 1
+3) 5 3
+4) 2
+5) 3
+6) 1
+7) 4
 
 ```
 
