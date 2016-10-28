@@ -40,10 +40,11 @@ class WUIPMTree {
     void ResetTemporaryValues(int, std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >);
     std::vector<PAIR_DOUBLE_INT_DOUBLE> GetTransformedRow (std::vector<PAIR_INT_DOUBLE>&);
     double GetCurrentExpectedSupportCapOfFeature (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >& feature_to_node_in_tree, int feature_id);
-    void Mine(std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >, std::vector<std::vector<int> >&, std::vector<int>, double);
-    std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > PruneTree (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >, int, double);
+    void Mine(std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >, std::vector<std::vector<int> >&, std::vector<int>, double, double, double);
+    std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > > PruneTree (std::unordered_map<int, std::vector<std::shared_ptr<WUIPMNode> > >, int, double, double, double);
     void SetOrderOfFeature();
     double GetUConfCap (double expected_support_cap, double so_far_maximum_expecected_support, int candidate_feature_id);
+    double GetWUConfCap (double expected_support_cap, double so_far_minimum_weight, double so_far_maximum_weighted_expected_support, int candidate_feature_id);
 
     std::shared_ptr<WUIPMNode> root_;
     std::unordered_map<int, double> expected_support_of_items_;
@@ -54,7 +55,7 @@ class WUIPMTree {
     double minimum_support_threshold_percentage_;
     double minimum_u_conf_;
     double minimum_wu_conf_;
-    std::unordered_map<int, double> weight;
+    std::unordered_map<int, double> weight_;
 };
 
 #endif // WUIPM_CPLUS_WUIPM_TREE_H_
